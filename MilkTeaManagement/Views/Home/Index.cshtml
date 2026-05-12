@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MilkTea.Models.Product>
+
+@{
+    ViewData["Title"] = "Trang Chủ - CHẤT COFFEE";
+}
+
+
+
+<div class="container-fluid p-0 mb-5">
+
+   <div class="row align-items-center" data-aos="fade-up">
+    <div class="col-md-6">
+        <h1 class="display-3 fw-bold">Hương vị <br> làm nên phong cách.</h1>
+        <a asp-action="Menu" class="btn btn-dark rounded-pill px-5 py-3 mt-3">KHÁM PHÁ NGAY</a>
+    </div>
+    <div class="col-md-6" data-aos="zoom-in" data-aos-delay="200">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" class="img-fluid shadow-lg rounded-4">
+    </div>
+</div>
+    </div>
+</div>
+
+<div class="container my-5 text-center">
+    <h2 class="fw-bold" style="color: #1e3932;">Chất lượng từ nguồn gốc</h2>
+    <p class="text-muted mx-auto" style="max-width: 700px;">
+        Chúng tôi tin rằng một ly cà phê ngon bắt đầu từ sự tôn trọng đối với người nông dân...
+    </p>
+</div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+    ViewData["Title"] = "Trang Chủ - CHẤT COFFEE";
+}
+
+@* 1. Banner chính *@
+<div class="container-fluid p-0 mb-5">
+    @* ... (Giữ nguyên đoạn Banner xanh "Hương vị làm nên phong cách" của anh) ... *@
+</div>
+
+@* 2. Phần Chất lượng từ nguồn gốc (Như trong ảnh anh gửi) *@
+<div class="container my-5">
+    @* ... (Giữ nguyên đoạn giới thiệu hạt cà phê) ... *@
+</div>
+
+@* 3. Phần Đăng ký thành viên *@
+<div class="container mb-5">
+    @* ... (Giữ nguyên đoạn Form đăng ký nhận ưu đãi 20%) ... *@
+</div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    /* Hiệu ứng mượt mà */
+    .product-card { transition: all 0.3s ease; }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important; }
+    .transition-img { transition: transform 0.5s ease; }
+    .product-card:hover .transition-img { transform: scale(1.1); }
+    .btn-add-cart { background: #1e3932; border: none; font-size: 0.75rem; }
+    .btn-add-cart:hover { background: #cba258; }
+</style>

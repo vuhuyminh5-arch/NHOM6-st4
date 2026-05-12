@@ -1,0 +1,37 @@
+﻿@model MilkTea.Models.Product
+
+<div class="container mt-5 px-5">
+    <h2 class="fw-bold" style="color: #1e3932;">Chỉnh sửa thực đơn</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tên món</label>
+                    <input asp-for="Name" class="form-control rounded-pill" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Giá bán</label>
+                    <input asp-for="Price" class="form-control rounded-pill" type="number" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Link hình ảnh</label>
+                    <input asp-for="ImageUrl" class="form-control rounded-pill" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Loại đồ uống</label>
+                    <select asp-for="CategoryId" class="form-select rounded-pill" asp-items="ViewBag.CategoryId"></select>
+                </div>
+                <button type="submit" class="btn btn-dark rounded-pill px-4">Cập nhật</button>
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">Hủy</a>
+            </form>
+        </div>
+        <div class="col-md-6 text-center">
+            <p class="text-muted small text-uppercase fw-bold">Ảnh hiện tại</p>
+            <div class="rounded-circle overflow-hidden shadow mx-auto" style="width: 250px; height: 250px;">
+                <img src="@Model.ImageUrl" class="w-100 h-100" style="object-fit: cover;" />
+            </div>
+        </div>
+    </div>
+</div>

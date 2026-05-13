@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MilkTea.Data;
 using MilkTea.Models;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MilkTea.Controllers
 {
@@ -15,36 +16,29 @@ namespace MilkTea.Controllers
             _context = context;
         }
 
-        // Bước quan trọng: Phải có chữ async và Task<IActionResult>
         public IActionResult Index()
         {
             return View();
         }
 
-        // Trang Thực đơn: Lấy danh sách món từ SQL và gửi sang View Menu
         public async Task<IActionResult> Menu(int? categoryId, string searchTerm)
         {
-            // 1. Lấy danh sách Categories để hiện lên các nút bấm (Tab)
-            var categories = await _context.Categories.ToListAsync();
-            ViewBag.Categories = categories;
+            ViewBag.Categories = await _context.Categories.ToListAsync();
 
-            // 2. Bắt đầu truy vấn sản phẩm
             var query = _context.Products.Include(p => p.Category).AsQueryable();
 
-            // 3. Lọc theo danh mục nếu có chọn
             if (categoryId.HasValue)
             {
                 query = query.Where(p => p.CategoryId == categoryId);
             }
 
-            // 4. Lọc theo từ khóa tìm kiếm nếu có nhập
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(p => p.Name.Contains(searchTerm));
             }
 
-            var resultList = await query.ToListAsync();
-            return View(resultList);
+            var result = await query.ToListAsync();
+            return View(result);
         }
 
         public IActionResult Privacy()

@@ -7,7 +7,7 @@ namespace MilkTea.Models
     {
         public int Id { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Now;
-        public string? UserId { get; set; } // Liên kết với tài khoản khách hàng
+        public string? UserId { get; set; } 
         public decimal TotalAmount { get; set; }
 
         [Required(ErrorMessage = "Anh Minh ơi, khách quên nhập tên kìa!")]
@@ -19,6 +19,6 @@ namespace MilkTea.Models
         [Required]
         public string Phone { get; set; } = string.Empty;
 
-        public string Status { get; set; } = "Chờ xác nhận"; // Trạng thái đơn
+        public string Status { get; set; } = "Chờ xác nhận"; 
     }
 }

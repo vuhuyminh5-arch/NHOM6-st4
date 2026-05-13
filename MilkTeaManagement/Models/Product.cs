@@ -8,18 +8,17 @@ namespace MilkTea.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(200)]
-        // THÊM = string.Empty; Ở ĐÂY 👇
+        [Required(ErrorMessage = "Anh Minh ơi, đừng quên đặt tên cho món nhé!")]
         public string Name { get; set; } = string.Empty;
 
+        [Range(0, double.MaxValue, ErrorMessage = "Giá không thể âm được đâu anh!")]
         public decimal Price { get; set; }
 
-        // THÊM = string.Empty; Ở ĐÂY 👇
-        public string? ImageUrl { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; } 
 
-        public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
-        public Category Category { get; set; } = null!; // Thêm = null! để báo hệ thống bỏ qua cảnh báo này
+        public int CategoryId { get; set; } 
+
+        public virtual Category? Category { get; set; }
     }
 }
+

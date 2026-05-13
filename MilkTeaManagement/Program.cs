@@ -4,18 +4,14 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-// Thêm dòng này để hệ thống hiểu được các trang Identity (Razor Pages)
 builder.Services.AddRazorPages();
 
-// Đăng ký ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Tìm đoạn này
 builder.Services.AddDefaultIdentity<IdentityUser>(options => {
-    options.SignIn.RequireConfirmedAccount = false; // Đăng ký xong là chơi luôn
+    options.SignIn.RequireConfirmedAccount = false; 
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
@@ -23,7 +19,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
 }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -32,14 +27,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // Chuyển cái này lên trên
+app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Xác thực trước
-app.UseAuthorization();  // Phân quyền sau
+app.UseAuthentication(); 
+app.UseAuthorization();  
 
-app.MapRazorPages(); // Để chạy các trang Identity
+app.MapRazorPages(); 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -53,9 +48,7 @@ app.MapControllerRoute(
 
 
 app.Run();
-// ... (Các đoạn code khác) ...
 
 app.UseAuthentication(); // Xác thực (Bạn là ai?)
 app.UseAuthorization();  // Phân quyền (Bạn được làm gì?)
 
-// Lưu ý: app.UseAuthorization() PHẢI nằm sau app.UseAuthentication()

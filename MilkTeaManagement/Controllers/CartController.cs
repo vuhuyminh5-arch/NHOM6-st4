@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MilkTea.Data; // Nhớ đổi tên theo project của anh
+using MilkTea.Data; 
 using MilkTea.Models;
-using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 public class CartController : Controller
 {
     private readonly ApplicationDbContext _context;
-    // Em dùng một danh sách tạm thời (Static) để anh Minh dễ test nhanh không cần cài Session phức tạp
     public static List<CartItem> _cart = new List<CartItem>();
 
     public CartController(ApplicationDbContext context) { _context = context; }
-    // Thêm hàm này vào để mở được trang Giỏ hàng
     public IActionResult Index()
     {
         return View(_cart);
@@ -19,7 +18,7 @@ public class CartController : Controller
     public IActionResult AddToCart(int id)
     {
         var product = _context.Products.Find(id);
-        if (product == null) return NotFound(); // Thêm dòng này để bảo vệ hệ thống
+        if (product == null) return NotFound(); 
 
         var item = _cart.FirstOrDefault(c => c.ProductId == id);
         if (item == null)
@@ -38,22 +37,29 @@ public class CartController : Controller
             item.Quantity++;
         }
         TempData["SuccessMsg"] = $"Đã thêm {product.Name} vào giỏ!";
-        // Quay lại trang Thực đơn sau khi thêm món thành công
         return RedirectToAction("Menu", "Home");
     }
 
     public IActionResult Remove(int id)
     {
         _cart.RemoveAll(c => c.ProductId == id);
-        // Sửa dòng cuối cùng trong hàm AddToCart TempDat   a
+      
 
 
-        // Quay lại trang Thực đơn sau khi thêm món thành công
         return RedirectToAction("Menu", "Home");
     }
-    [HttpGet]
     public IActionResult Checkout()
     {
+        var cartItems = GetCartItems();
+
+        if (cartItems == null || !cartItems.Any())
+        {
+            return RedirectToAction("Index");
+        }
+
+        ViewBag.CartItems = cartItems;
+        ViewBag.Total = cartItems.Sum(x => x.Price * x.Quantity);
+
         return View();
     }
 
@@ -61,19 +67,21 @@ public class CartController : Controller
     [Authorize]
     public async Task<IActionResult> Checkout(Order order)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(order);
+        }
+
         if (string.IsNullOrEmpty(order.Address))
         {
             order.Address = "Địa chỉ chưa xác định";
         }
-        // 1. Tính tổng tiền
         order.TotalAmount = _cart.Sum(x => x.Total);
         order.OrderDate = DateTime.Now;
 
-        // 2. Lưu thông tin đơn hàng chính
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
 
-        // 3. Lưu chi tiết từng món vào bảng OrderDetail
         foreach (var item in _cart)
         {
             var detail = new OrderDetail
@@ -87,16 +95,13 @@ public class CartController : Controller
         }
         await _context.SaveChangesAsync();
 
-        // 4. Xóa giỏ hàng sau khi mua xong
         _cart.Clear();
 
-        return Content("Cảm ơn anh Minh! Đơn hàng đã được ghi nhận thành công.");
+        return RedirectToAction("OrderSuccess");
     }
-    // Hàm hiển thị danh sách đơn hàng cho anh Minh quản lý*
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> OrderList()
     {
-        // Lấy toàn bộ đơn hàng từ bảng Orders, sắp xếp theo ngày mới nhất
         var orders = await _context.Orders
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
@@ -105,7 +110,6 @@ public class CartController : Controller
     }
     public async Task<IActionResult> OrderDetails(int id)
     {
-        // Lấy chi tiết đơn hàng kèm theo thông tin Sản phẩm
         var details = await _context.OrderDetails
             .Include(d => d.Product)
             .Where(d => d.OrderId == id)
@@ -118,10 +122,19 @@ public class CartController : Controller
         var order = await _context.Orders.FindAsync(id);
         if (order != null)
         {
-            order.Status = status; // Cập nhật trạng thái mới
+            order.Status = status; 
             await _context.SaveChangesAsync();
         }
-        // Quay lại trang danh sách đơn hàng
         return RedirectToAction("OrderList");
+    }
+    public IActionResult OrderSuccess()
+    {
+        return View();
+    }
+
+
+    private List<CartItem> GetCartItems()
+    {
+        return _cart;
     }
 }

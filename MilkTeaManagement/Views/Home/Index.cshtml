@@ -4,19 +4,15 @@
     ViewData["Title"] = "Trang Chủ - CHẤT COFFEE";
 }
 
-
-
 <div class="container-fluid p-0 mb-5">
-
-   <div class="row align-items-center" data-aos="fade-up">
-    <div class="col-md-6">
-        <h1 class="display-3 fw-bold">Hương vị <br> làm nên phong cách.</h1>
-        <a asp-action="Menu" class="btn btn-dark rounded-pill px-5 py-3 mt-3">KHÁM PHÁ NGAY</a>
-    </div>
-    <div class="col-md-6" data-aos="zoom-in" data-aos-delay="200">
-        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" class="img-fluid shadow-lg rounded-4">
-    </div>
-</div>
+    <div class="row align-items-center" data-aos="fade-up">
+        <div class="col-md-6">
+            <h1 class="display-3 fw-bold">Hương vị <br> làm nên phong cách.</h1>
+            <a asp-action="Menu" class="btn btn-dark rounded-pill px-5 py-3 mt-3">KHÁM PHÁ NGAY</a>
+        </div>
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" class="img-fluid shadow-lg rounded-4" />
+        </div>
     </div>
 </div>
 
@@ -27,35 +23,28 @@
     </p>
 </div>
 
-    @if (Model != null && Model.Any())
-    {
+@if (Model != null && Model.Any())
+{
+    <div class="container">
         <div class="row g-4">
             @foreach (var item in Model)
             {
-    ViewData["Title"] = "Trang Chủ - CHẤT COFFEE";
-}
-
-@* 1. Banner chính *@
-<div class="container-fluid p-0 mb-5">
-    @* ... (Giữ nguyên đoạn Banner xanh "Hương vị làm nên phong cách" của anh) ... *@
-</div>
-
-@* 2. Phần Chất lượng từ nguồn gốc (Như trong ảnh anh gửi) *@
-<div class="container my-5">
-    @* ... (Giữ nguyên đoạn giới thiệu hạt cà phê) ... *@
-</div>
-
-@* 3. Phần Đăng ký thành viên *@
-<div class="container mb-5">
-    @* ... (Giữ nguyên đoạn Form đăng ký nhận ưu đãi 20%) ... *@
-</div>
+                <div class="col-6 col-md-3">
+                    <div class="card product-card">
+                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/300x200?text=No+Image" : item.ImageUrl)" class="card-img-top transition-img" alt="@item.Name" />
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.Price.ToString("C")</p>
+                            <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-add-cart">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
-    }
-</div>
+    </div>
+}
 
 <style>
-    /* Hiệu ứng mượt mà */
     .product-card { transition: all 0.3s ease; }
     .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important; }
     .transition-img { transition: transform 0.5s ease; }

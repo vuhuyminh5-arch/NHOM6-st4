@@ -1,0 +1,28 @@
+﻿@model MilkTea.Models.Product
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-lg rounded-4 text-center p-4">
+                <div class="text-danger mb-3">
+                    <i class="bi bi-exclamation-octagon-fill" style="font-size: 4rem;"></i>
+                </div>
+                <h4 class="fw-bold">XÁC NHẬN XÓA MÓN?</h4>
+                <p class="text-muted">Anh Minh chắc chắn muốn xóa món <br><span class="text-dark fw-bold">"@Model.Name"</span> chứ?</p>
+                
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" class="img-thumbnail rounded-3 mb-4" style="height: 150px;" />
+                }
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg rounded-pill fw-bold">VĨNH BIỆT MÓN NÀY</button>
+                        <a asp-action="Index" class="btn btn-light btn-lg rounded-pill">SUY NGHĨ LẠI (HỦY)</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

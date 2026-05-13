@@ -403,3 +403,4 @@ C:\Users\vuhuy\source\repos\MilkTeaManagement\MilkTeaManagement\obj\Debug\net10.
 C:\Users\vuhuy\source\repos\MilkTeaManagement\MilkTeaManagement\obj\Debug\net10.0\MilkTea.pdb
 C:\Users\vuhuy\source\repos\MilkTeaManagement\MilkTeaManagement\obj\Debug\net10.0\MilkTea.genruntimeconfig.cache
 C:\Users\vuhuy\source\repos\MilkTeaManagement\MilkTeaManagement\obj\Debug\net10.0\ref\MilkTea.dll
+C:\Users\vuhuy\source\repos\MilkTeaManagement\MilkTeaManagement\obj\Debug\net10.0\MilkTea.sourcelink.json

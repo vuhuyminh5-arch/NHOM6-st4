@@ -5,7 +5,7 @@
     @if (Model.Count == 0)
     {
         <div class="text-center py-5">
-            <p class="fs-4">Giỏ hàng đang trống. Đi mua trà sữa thôi anh Minh ơi!</p>
+            <p class="fs-4">Giỏ hàng đang trống. Đi mua trà sữa thôi !</p>
             <a asp-controller="Products" asp-action="Index" class="btn btn-success rounded-pill px-4">QUAY LẠI THỰC ĐƠN</a>
         </div>
     }
@@ -39,7 +39,9 @@
         </table>
         <div class="text-end mt-4">
             <h3 class="fw-bold text-success">TỔNG CỘNG: @Model.Sum(x => x.Total).ToString("#,##0") đ</h3>
-            <a asp-action="Checkout" class="btn btn-dark btn-lg rounded-pill px-5">THANH TOÁN NGAY</a>
+            <a asp-controller="Cart" asp-action="Checkout" class="btn btn-dark rounded-pill p-3 px-5 fw-bold">
+                THANH TOÁN NGAY
+            </a>
         </div>
     }
 </div>

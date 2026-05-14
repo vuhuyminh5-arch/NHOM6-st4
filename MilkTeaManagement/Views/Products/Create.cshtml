@@ -1,0 +1,37 @@
+﻿@model Product
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-dark text-white text-center py-4 rounded-top-4">
+                    <h4 class="fw-bold mb-0">☕ ĐĂNG MÓN MỚI</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="fw-bold mb-2">Tên món nước</label>
+                            <input asp-for="Name" class="form-control rounded-3" placeholder="Ví dụ: Bạc xỉu đá..." required />
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="fw-bold mb-2">Giá bán (VNĐ)</label>
+                                <input asp-for="Price" type="number" class="form-control rounded-3" required />
+                            </div>
+                            <div class="col-6">
+                                <label class="fw-bold mb-2">Loại món</label>
+                                <select asp-for="CategoryId" class="form-select rounded-3" asp-items="ViewBag.CategoryId"></select>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="fw-bold mb-2">Chọn ảnh từ máy tính</label>
+                            <input type="file" name="imageFile" class="form-control" accept="image/*" required />
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold">XÁC NHẬN ĐĂNG</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

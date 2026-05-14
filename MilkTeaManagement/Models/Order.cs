@@ -19,6 +19,8 @@ namespace MilkTea.Models
         [Required]
         public string Phone { get; set; } = string.Empty;
 
-        public string Status { get; set; } = "Chờ xác nhận"; 
+        public string Status { get; set; } = "Chờ xác nhận";
+        [Required]
+        public string PaymentMethod { get; set; } = "Tien mat";
     }
 }

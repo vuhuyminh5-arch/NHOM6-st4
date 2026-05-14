@@ -20,6 +20,30 @@
                         <label class="form-label fw-bold">Địa chỉ nhận hàng</label>
                         <textarea asp-for="Address" class="form-control rounded-4 px-4 py-2" rows="3" placeholder="Số nhà, tên đường, phường/xã..." required></textarea>
                     </div>
+                    <div class="mb-4">
+                        <label class="form-label d-block fw-bold text-dark mb-2">Phương thức thanh toán</label>
+    
+                        <div class="p-3 border rounded mb-2 bg-light d-flex align-items-center">
+                            <div class="form-check w-100">
+                                <input asp-for="PaymentMethod" class="form-check-input" type="radio" value="Tien mat" id="paymentCash" checked />
+                                <label class="form-check-label fw-semibold ms-2" for="paymentCash">
+                                    💵 Tiền mặt (Thanh toán khi nhận hàng - COD)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="p-3 border rounded bg-light d-flex align-items-center">
+                            <div class="form-check w-100">
+                                <input asp-for="PaymentMethod" class="form-check-input" type="radio" value="Chuyen khoan" id="paymentTransfer" />
+                                <label class="form-check-label fw-semibold ms-2" for="paymentTransfer">
+                                    💳 Chuyển khoản ngân hàng (Qua mã QR/Banking)
+                                </label>
+                            </div>
+                        </div>
+    
+                        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                    </div>
+
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-dark btn-lg rounded-pill fw-bold py-3">XÁC NHẬN ĐẶT HÀNG</button>

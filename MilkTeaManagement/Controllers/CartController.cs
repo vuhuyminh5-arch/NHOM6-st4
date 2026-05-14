@@ -26,6 +26,8 @@ public class CartController : Controller
     // ── Helper: lưu giỏ hàng vào Session ─────────────────────────
     private void SaveCart(List<CartItem> cart)
     {
+        HttpContext.Session.Remove("Cart");
+        HttpContext.Session.Remove("cart");
         HttpContext.Session.SetString(CartSessionKey, JsonSerializer.Serialize(cart));
     }
 
@@ -125,11 +127,40 @@ public class CartController : Controller
         await _context.SaveChangesAsync();
 
         // Xóa giỏ hàng của đúng user này thôi
-        SaveCart(new List<CartItem>());
+        SaveCart(new List<CartItem>());             // 1. Gán lại giỏ hàng rỗng
+        HttpContext.Session.Remove(CartSessionKey); // 2. Xóa sạch Key Session "Cart" khỏi bộ nhớ
+        // >>> BẠN CHÈN ĐOẠN ĐIỀU KIỆN NÀY THAY CHO DÒNG 130 CŨ <<<
+        if (order.PaymentMethod == "Chuyen khoan")
+        {
+            // Chuyển hướng sang trang hướng dẫn chuyển khoản và kèm theo Id của đơn hàng vừa tạo
+            return RedirectToAction("PaymentTransfer", new { orderId = order.Id });
+        }
 
+        // Nếu là tiền mặt thì về trang thành công như cũ
         return RedirectToAction("OrderSuccess");
     }
+    [HttpGet]
+    public async Task<IActionResult> PaymentTransfer(int orderId)
+    {
+        // Tìm đơn hàng trong cơ sở dữ liệu dựa vào orderId
+        var order = await _context.Orders.FindAsync(orderId);
 
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        // Trả về giao diện kèm theo thông tin đơn hàng để lấy số tiền
+        return View(order);
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetOrderStatus(int orderId)
+    {
+        var order = await _context.Orders.FindAsync(orderId);
+        if (order == null) return NotFound();
+
+        return Json(new { status = order.Status });
+    }
     // ── Danh sách đơn hàng (Admin) ────────────────────────────────
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> OrderList()

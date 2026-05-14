@@ -20,3 +20,13 @@
         <a href="/" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold">VỀ TRANG CHỦ</a>
     </div>
 </div>
+@section Scripts {
+    <script>
+        // Khi trang Đặt hàng thành công hiện lên, xóa sạch giỏ hàng ở phía trình duyệt
+        localStorage.removeItem('cart');    // Thay 'cart' bằng tên biến frontend của bạn (nếu có)
+        sessionStorage.removeItem('cart');  // Xóa cả trong SessionStorage cho chắc chắn
+        
+        // Nếu bạn dùng Cookie ở Frontend thì xóa luôn Cookie giỏ hàng
+        document.cookie = "cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    </script>
+}

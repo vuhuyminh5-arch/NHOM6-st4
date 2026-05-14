@@ -81,22 +81,27 @@
                     <partial name="_LoginPartial" />
 
                     <div class="ms-3">
-                        <a asp-controller="Cart" asp-action="Index" class="btn position-relative">
-                            <i class="bi bi-bag-heart fs-4"></i>
-                            @{
-    var cartJson = Context.Session.GetString("Cart");
-    var cartCount = 0;
-    if (cartJson != null)
-    {
-        var cartItems = System.Text.Json.JsonSerializer.Deserialize<List<MilkTea.Models.CartItem>>(cartJson);
-        cartCount = cartItems?.Sum(x => x.Quantity) ?? 0;
-    }
-}
-<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-    @(cartCount > 0 ? cartCount.ToString() : "")
-</span>
-                        </a>
-                    </div>
+    <a asp-controller="Cart" asp-action="Index" class="btn position-relative">
+        <i class="bi bi-bag-heart fs-4"></i>
+        @{
+            // Đọc thử cả chữ C viết hoa và c viết thường để chống sót lỗi
+            var cartJson = Context.Session.GetString("Cart") ?? Context.Session.GetString("cart");
+            var cartCount = 0;
+            if (cartJson != null)
+            {
+                var cartItems = System.Text.Json.JsonSerializer.Deserialize<List<MilkTea.Models.CartItem>>(cartJson);
+                cartCount = cartItems?.Sum(x => x.Quantity) ?? 0;
+            }
+        }
+        
+        @if (cartCount > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                @cartCount
+            </span>
+        }
+    </a>
+</div>
                 </div>
             </div>
         </nav>

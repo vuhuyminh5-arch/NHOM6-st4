@@ -84,9 +84,7 @@
 
     @foreach (var item in Model)
     {
-        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-    <i class="bi bi-trash-fill"></i> Xóa món
-</a>
+        
         <div class="col-lg-3 col-md-4 col-6 mb-4" data-aos="fade-up" data-aos-delay="@(i * 100)">
             <div class="card h-100 border-0 shadow-sm rounded-4 product-card overflow-hidden">
                 <div class="position-relative bg-light p-3">
@@ -94,11 +92,15 @@
                 </div>
                 <div class="card-body text-center p-3">
                     <h6 class="fw-bold mb-1">@item.Name</h6>
-                    <p class="text-success fw-bold mb-3">@item.Price.ToString("#,##0") đ</p>
-                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.Id" 
-                       class="btn btn-dark w-100 rounded-pill py-2 fw-bold shadow-sm">
-                       + THÊM VÀO GIỎ
-                    </a>
+                    <p class="text-success fw-bold mb-2">@item.Price.ToString("#,##0") đ</p>
+
+                    <div class="d-flex justify-content-center mt-2">
+                        <a asp-action="Delete" asp-route-id="@item.Id"
+                           class="btn-delete-mini"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa món này không?')">
+                            Xóa món
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,7 +120,7 @@
 <div class="row justify-content-center mb-5" data-aos="fade-up" data-aos-delay="100">
     <div class="col-md-6">
         <form asp-action="Index" method="get" class="d-flex bg-white rounded-pill shadow-sm p-1 border">
-            <input type="text" name="searchString" class="form-control border-0 rounded-pill px-4" placeholder="Anh Minh muốn uống gì hôm nay?..." value="@ViewData["CurrentFilter"]">
+            <input type="text" name="searchString" class="form-control border-0 rounded-pill px-4" placeholder="Bạn muốn uống gì hôm nay?..." value="@ViewData["CurrentFilter"]">
             <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold" style="background-color: #1e3932;">TÌM KIẾM</button>
         </form>
     </div>
@@ -130,4 +132,21 @@
     .card:hover { transform: translateY(-5px); transition: 0.3s; cursor: pointer; }
     .btn-outline-success { color: #006241; border-color: #006241; }
     .btn-outline-success:hover { background-color: #006241; color: white; }
+    .btn-delete-mini {
+        padding: 4px 15px;
+        font-size: 0.75rem;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        background-color: transparent;
+        font-weight: 600;
+    }
+
+        .btn-delete-mini:hover {
+            background-color: #dc3545;
+            color: white !important;
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+        }
 </style>

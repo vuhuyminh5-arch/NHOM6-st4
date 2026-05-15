@@ -69,7 +69,7 @@ public class CartController : Controller
 
         SaveCart(cart);
         TempData["SuccessMsg"] = $"Đã thêm {quantity} x {product.Name} vào giỏ!";
-        return RedirectToAction("Menu", "Home");
+        return Json(new { success = true, message = "Đã thêm vào giỏ hàng" });
     }
 
     // ── Xóa khỏi giỏ ─────────────────────────────────────────────

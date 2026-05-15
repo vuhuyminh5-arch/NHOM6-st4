@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<MilkTea.Models.Product>
 @{
     ViewData["Title"] = "Thực Đơn - CHẤT COFFEE";
+    var currentCategoryId = Context.Request.Query["categoryId"].ToString();
 }
 
 <div class="container my-5">
@@ -11,24 +12,28 @@
 
     <div class="text-center mb-4" data-aos="fade-up">
         <div class="d-inline-flex p-2 bg-light rounded-pill shadow-sm">
-            <a href="@Url.Action("Menu", "Home")" class="btn btn-dark rounded-pill px-4 me-2">Tất cả</a>
-            @if (ViewBag.Categories != null) {
-                foreach (var cat in ViewBag.Categories) {
-                    <a href="@Url.Action("Menu", "Home", new { categoryId = cat.Id })" 
-                       class="btn btn-outline-dark border-0 rounded-pill px-4 mx-1">@cat.Name</a>
+            <a href="@Url.Action("Menu", "Home")"
+               class="btn @(string.IsNullOrEmpty(currentCategoryId) ? "btn-dark" : "btn-outline-dark border-0") rounded-pill px-4 me-2 filter-btn">Tất cả</a>
+            @if (ViewBag.Categories != null)
+            {
+                foreach (var cat in ViewBag.Categories)
+                {
+                    <a href="@Url.Action("Menu", "Home", new { categoryId = cat.Id })"
+                       class="btn @(currentCategoryId == cat.Id.ToString() ? "btn-dark" : "btn-outline-dark border-0") rounded-pill px-4 mx-1 filter-btn">@cat.Name</a>
                 }
+            }
             }
         </div>
     </div>
 
-    <form asp-action="Menu" method="get" class="d-flex justify-content-center mb-5" data-aos="fade-up" data-aos-delay="100">
+    <form id="searchForm" asp-action="Menu" method="get" class="d-flex justify-content-center mb-5" data-aos="fade-up" data-aos-delay="100">
         <div class="input-group" style="max-width: 600px;">
-            <input type="text" name="searchTerm" class="form-control rounded-start-pill ps-4 shadow-sm border-end-0" placeholder="Anh Minh muốn tìm món gì?">
+            <input type="text" name="searchTerm" class="form-control rounded-start-pill ps-4 shadow-sm border-end-0" placeholder="Bạn muốn tìm món gì?">
             <button type="submit" class="btn btn-dark rounded-end-pill px-4 shadow-sm fw-bold">TÌM KIẾM</button>
         </div>
     </form>
 
-    <div class="row g-4">
+    <div class="row g-4" id="product-list-container">
         @foreach (var item in Model) {
             <div class="col-6 col-md-4 col-lg-3" data-aos="zoom-in">
                 <div class="card h-100 border-0 shadow-sm product-card rounded-4 overflow-hidden">
@@ -39,18 +44,13 @@
     <h6 class="fw-bold mb-1">@item.Name</h6>
     <p class="text-muted small mb-2">@(item.Category?.Name ?? "Chưa phân loại")</p>
 
-   
-    <form asp-controller="Cart" asp-action="AddToCart" method="get" class="mt-auto">
+               <form asp-controller="Cart" asp-action="AddToCart" method="get" class="mt-auto add-to-cart-form">
         <input type="hidden" name="id" value="@item.Id" />
-        <div class="input-group input-group-sm mb-2">
-            <button type="button" class="btn btn-outline-secondary btn-minus"
-                    style="border-radius: 20px 0 0 20px;">−</button>
-            <input type="number" name="quantity" value="1" min="1" max="99"
-                   class="form-control text-center qty-input border-secondary"
-                   style="max-width: 50px;" />
-            <button type="button" class="btn btn-outline-secondary btn-plus"
-                    style="border-radius: 0 20px 20px 0;">+</button>
-        </div>
+                            <div class="quantity-wrapper mb-3">
+                                <button type="button" class="qty-btn btn-minus" aria-label="Giảm">-</button>
+                                <input type="number" name="quantity" value="1" min="1" max="99" class="qty-input" readonly>
+                                <button type="button" class="qty-btn btn-plus" aria-label="Tăng">+</button>
+                            </div>
         <button type="submit" class="btn btn-dark btn-sm rounded-pill px-4 btn-add-cart w-100 py-2 fw-bold">
             MUA NGAY
         </button>
@@ -63,25 +63,138 @@
 </div>
 
 <style>
-    .product-card { transition: all 0.4s ease; border: 1px solid rgba(0,0,0,0.05) !important; }
-    .product-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(30, 57, 50, 0.15) !important; }
-    .transition-img { transition: transform 0.6s ease; }
-    .product-card:hover .transition-img { transform: scale(1.1); }
+    .qty-input::-webkit-outer-spin-button,
+    .qty-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .qty-input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .quantity-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 50px; 
+        width: fit-content;
+        margin: 0 auto;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .quantity-wrapper:hover {
+            border-color: #343a40;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+    .qty-btn {
+        background: transparent;
+        border: none;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #495057;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+        .qty-btn:hover {
+            background: #e9ecef;
+            color: #000;
+        }
+
+    .qty-input {
+        width: 40px;
+        border: none;
+        background: transparent;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1rem;
+        color: #212529;
+        outline: none;
+    }
 </style>
 <script>
-    document.querySelectorAll('.btn-minus').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const input = this.closest('.input-group').querySelector('.qty-input');
-            const val = parseInt(input.value);
-            if (val > 1) input.value = val - 1;
-        });
-    });
+        document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('qty-btn')) {
+            const wrapper = e.target.closest('.quantity-wrapper');
+            const input = wrapper.querySelector('.qty-input');
+            let val = parseInt(input.value);
 
-    document.querySelectorAll('.btn-plus').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const input = this.closest('.input-group').querySelector('.qty-input');
-            const val = parseInt(input.value);
-            if (val < 99) input.value = val + 1;
-        });
+            if (e.target.classList.contains('btn-plus')) {
+                if (val < 99) input.value = val + 1;
+            } else if (e.target.classList.contains('btn-minus')) {
+                if (val > 1) input.value = val - 1;
+            }
+        }
     });
 </script>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 1. XỬ LÝ LỌC DANH MỤC & TÌM KIẾM (KHÔNG LOAD TRANG)
+            // Lắng nghe sự kiện click trên toàn trang
+            document.addEventListener('click', function (e) {
+                const btn = e.target.closest('.filter-btn');
+                if (btn) {
+                    e.preventDefault();
+                    const url = btn.getAttribute('href');
+
+                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(response => response.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            // Tìm dữ liệu mới và dán vào đúng ID product-list-container bạn đã đặt
+                            const newData = doc.getElementById('product-list-container').innerHTML;
+                            document.getElementById('product-list-container').innerHTML = newData;
+
+                            window.history.pushState(null, '', url);
+
+                            // Cập nhật lại trạng thái nút (màu đen/trắng)
+                            document.querySelectorAll('.filter-btn').forEach(b => b.classList.replace('btn-dark', 'btn-outline-dark'));
+                            btn.classList.replace('btn-outline-dark', 'btn-dark');
+                        });
+                }
+            });
+
+            // 2. XỬ LÝ MUA NGAY (HIỆN POPUP TOAST)
+            document.addEventListener('submit', function (e) {
+                if (e.target.classList.contains('add-to-cart-form')) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const url = form.action;
+                    const params = new URLSearchParams(new FormData(form)).toString();
+
+                    fetch(url + '?' + params, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true
+                                }).fire({
+                                    icon: 'success',
+                                    title: 'Đã thêm vào giỏ hàng!'
+                                });
+
+                                // (Tùy chọn) Cập nhật số lượng trên icon giỏ hàng nếu cần
+                            }
+                        });
+                }
+            });
+        });
+    </script>
+}

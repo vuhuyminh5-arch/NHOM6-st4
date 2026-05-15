@@ -40,23 +40,14 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
-                        </li>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-danger" href="#" role="button" data-bs-toggle="dropdown">Quản trị</a>
-                                <ul class="navbar-nav flex-grow-1">
-    
-    <ul class="navbar-nav flex-grow-1">
+                        
     <li class="nav-item">
         <a class="nav-link text-dark px-3 fw-bold" asp-controller="Home" asp-action="Index">TRANG CHỦ</a>
     </li>
     <li class="nav-item">
         <a class="nav-link text-dark px-3 fw-bold" asp-controller="Home" asp-action="Menu">THỰC ĐƠN</a>
     </li>
-</ul>
+
 
     @if (User.IsInRole("Admin"))
     {
@@ -73,9 +64,7 @@
             </ul>
         </li>
     }
-</ul>
-                            </li>
-                        }
+
                     </ul>
 
                     <partial name="_LoginPartial" />
